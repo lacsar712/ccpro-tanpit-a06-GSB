@@ -39,3 +39,18 @@ class LiquorSample(models.Model):
     taken_at = models.DateTimeField(auto_now_add=True)
     ph = models.FloatField()
     operator = models.CharField(max_length=64, blank=True)
+
+
+class SamplingBucket(models.Model):
+    """取样桶：整场共用一只（OneToOne 约束同一场最多一只现行桶）。"""
+
+    INITIAL_LEVEL = 0.2
+
+    yard = models.OneToOneField(Yard, on_delete=models.CASCADE, related_name="bucket")
+    level = models.FloatField(default=INITIAL_LEVEL)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(check=models.Q(level__gte=0), name="bucket_level_non_negative"),
+        ]

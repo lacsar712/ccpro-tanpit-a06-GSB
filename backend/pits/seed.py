@@ -1,4 +1,4 @@
-from pits.models import LiquorSample, Pit, User, Yard
+from pits.models import LiquorSample, Pit, SamplingBucket, User, Yard
 
 
 def seed_demo() -> None:
@@ -13,6 +13,7 @@ def seed_demo() -> None:
     if Yard.objects.exists():
         return
     yard = Yard.objects.create(name="南冈鞣场", village="青皮村")
+    SamplingBucket.objects.create(yard=yard, level=SamplingBucket.INITIAL_LEVEL)
     layout = [
         ("东-1", Pit.STATUS_TANNING, 0, 0, 4.2),
         ("东-2", Pit.STATUS_FILL, 0, 1, None),
